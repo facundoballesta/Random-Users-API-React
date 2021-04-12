@@ -1,38 +1,41 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import ProfilePictureModal from './ProfilePictureModal'
 
 
-export default function User(){
+export default function User() {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(function(){
+    useEffect(function () {
         fetch('https://randomuser.me/api/')
-        .then(response => response.json())
-        .then(data => {
-            const userFetch=data.results[0];
-            setUser(userFetch);
-            setLoading(false);
-        })
+            .then(response => response.json())
+            .then(data => {
+                const userFetch = data.results[0];
+                setUser(userFetch);
+                setLoading(false);
+            })
 
-    },[]);
+    }, []);
 
-   
-    if(loading){
-        return(
+
+    if (loading) {
+        return (
             <div className="spinner-border text-warning" role="status">
                 <span className="visually-hidden">Loading...</span>
             </div>
         );
     }
 
-    if(!loading){
-        return(
+    if (!loading) {
+        return (
             <div>
-                <img className="rounded-circle shadow img-fluid border border-warning" src={user.picture.large} alt=""/>
+                <a type="button" data-bs-toggle="modal" data-bs-target="#profilePictureModal">
+                    <img className="rounded-circle shadow img-fluid border border-warning" src={user.picture.large} alt="" />
+                </a>
                 <h1>{user.name.first} {user.name.last}</h1>
                 <p>{user.email}</p>
-                <hr/>
-                <div className="container bg-white rounded text-dark text-start">
+                <hr />
+                <div className="container bg-white rounded text-dark text-start p-2">
                     <h2>Info</h2>
                     <ul>
                         <li>Age: {user.dob.age}</li>
@@ -41,9 +44,12 @@ export default function User(){
                         <li>Phone: {user.phone}</li>
                     </ul>
                 </div>
+                <ProfilePictureModal
+                    img={user.picture.large}
+                />
             </div>
         );
     }
-        
-    
+
+
 }
